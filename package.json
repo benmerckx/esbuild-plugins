@@ -1,0 +1,21 @@
+{
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "@types/node": "^17.0.8",
+    "esbuild": "^0.14.11",
+    "typescript": "^4.5.4"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "esbuild packages/util/src/index.ts --log-level=silent --outdir=packages/util/dist && tsm ./packages/cli/src/index.ts build",
+    "bump": "tsm ./packages/cli/src/index.ts version",
+    "publish-all": "yarn workspaces foreach npm publish --tolerate-republish"
+  },
+  "dependencies": {
+    "tsm": "^2.2.1",
+    "wsrun": "^5.2.4"
+  }
+}

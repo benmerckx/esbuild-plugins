@@ -1,0 +1,19 @@
+{
+  "name": "@esbx/reporter",
+  "version": "0.0.0-alpha.0",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/benmerckx/esbx.git"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "exports": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "dependencies": {
+    "pretty-ms": "^7.0.1"
+  }
+}
