@@ -5,7 +5,7 @@ __metadata:
   version: 5
   cacheKey: 8
 
-"@esbx/alias@workspace:packages/alias":
+"@esbx/alias@0.0.0-alpha.1, @esbx/alias@workspace:packages/alias":
   version: 0.0.0-use.local
   resolution: "@esbx/alias@workspace:packages/alias"
   languageName: unknown
@@ -35,6 +35,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@esbx/react@workspace:packages/react"
   dependencies:
+    "@esbx/alias": 0.0.0-alpha.1
     dirname-filename-esm: ^1.1.1
   languageName: unknown
   linkType: soft
