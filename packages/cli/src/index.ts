@@ -1,5 +1,6 @@
 import sade from 'sade'
 import {buildAction} from './action/Build.js'
+import {publishAction} from './action/Publish.js'
 import {testAction} from './action/Test.js'
 import {versionAction} from './action/Version.js'
 
@@ -18,5 +19,8 @@ prog
   .command('test [pattern]')
   .describe('Test workspaces')
   .action(testAction)
+  .command('publish')
+  .describe('Publish workspaces')
+  .action(publishAction)
 
 prog.parse(process.argv)

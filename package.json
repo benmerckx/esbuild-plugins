@@ -8,7 +8,7 @@
     "build": "esbuild packages/util/src/index.ts --log-level=silent --outdir=packages/external/dist && esbuild packages/external/src/*.ts --log-level=silent --outdir=packages/external/dist && esbuild packages/extension/src/*.ts --log-level=silent --outdir=packages/extension/dist && tsm ./packages/cli/src/index.ts build",
     "test": "yarn build --skip-types && esbx test",
     "bump": "yarn build --skip-types && esbx version",
-    "publish-all": "yarn workspaces foreach npm publish --access public"
+    "publish": "yarn build && esbx publish"
   },
   "dependencies": {
     "tsm": "^2.2.1",
