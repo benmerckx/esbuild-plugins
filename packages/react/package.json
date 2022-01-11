@@ -1,5 +1,5 @@
 {
-  "name": "@esbx/legacy",
+  "name": "@esbx/react",
   "version": "0.0.0-alpha.1",
   "license": "MIT",
   "repository": "git://github.com/benmerckx/esbx.git",
@@ -11,6 +11,7 @@
   "types": "./dist/index.d.ts",
   "sideEffects": false,
   "dependencies": {
-    "@esbx/swc": "0.0.0-alpha.1"
+    "@esbx/alias": "0.0.0-alpha.1",
+    "dirname-filename-esm": "^1.1.1"
   }
 }

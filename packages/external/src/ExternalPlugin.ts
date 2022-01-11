@@ -9,19 +9,25 @@ export type ExternalPluginOptions = {
   ) => ExternalPluginResponse | Promise<ExternalPluginResponse>
 }
 
-export const ExternalPlugin = {
-  configure(options: ExternalPluginOptions): Plugin {
-    const filter = options.filter || /.*/
-    return {
-      name: '@esbx/external',
-      setup(build) {
-        build.onResolve({filter}, async args => {
-          if (!options.onResolve) return {path: args.path, external: true}
-          const result = await options.onResolve(args)
-          if (typeof result === 'string') return {path: result, external: true}
-          if (result) return {path: args.path, external: true}
-        })
-      }
+function plugin(options: ExternalPluginOptions = {}): Plugin {
+  const filter = options.filter || options.onResolve ? /.*/ : /^[^\.].*/
+  return {
+    name: '@esbx/external',
+    setup(build) {
+      build.onResolve({filter}, async args => {
+        if (args.kind === 'entry-point') return
+        if (!options.onResolve) return {path: args.path, external: true}
+        const result = await options.onResolve(args)
+        if (typeof result === 'string') return {path: result, external: true}
+        if (result) return {path: args.path, external: true}
+      })
     }
   }
 }
+
+export const ExternalPlugin = {...plugin(), configure: plugin}
+
+Object.defineProperty(ExternalPlugin, 'configure', {
+  enumerable: false,
+  value: plugin
+})

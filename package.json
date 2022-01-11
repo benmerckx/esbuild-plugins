@@ -1,21 +1,24 @@
 {
   "private": true,
   "type": "module",
-  "devDependencies": {
-    "@types/node": "^17.0.8",
-    "esbuild": "^0.14.11",
-    "typescript": "^4.5.4"
-  },
   "workspaces": [
     "packages/*"
   ],
   "scripts": {
-    "build": "esbuild packages/util/src/index.ts --log-level=silent --outdir=packages/util/dist && tsm ./packages/cli/src/index.ts build",
-    "bump": "tsm ./packages/cli/src/index.ts version",
-    "publish-all": "yarn workspaces foreach npm publish --tolerate-republish"
+    "build": "esbuild packages/util/src/index.ts --log-level=silent --outdir=packages/external/dist && esbuild packages/external/src/*.ts --log-level=silent --outdir=packages/external/dist && esbuild packages/extension/src/*.ts --log-level=silent --outdir=packages/extension/dist && tsm ./packages/cli/src/index.ts build",
+    "test": "yarn build --skip-types && esbx test",
+    "bump": "yarn build --skip-types && esbx version",
+    "publish-all": "yarn workspaces foreach npm publish --access public"
   },
   "dependencies": {
     "tsm": "^2.2.1",
+    "uvu": "^0.5.3",
     "wsrun": "^5.2.4"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.8",
+    "esbuild": "^0.14.11",
+    "esbx": "0.0.0-alpha.1",
+    "typescript": "^4.5.4"
   }
 }

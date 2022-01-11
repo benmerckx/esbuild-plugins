@@ -11,6 +11,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@esbx/extension@workspace:packages/extension":
+  version: 0.0.0-use.local
+  resolution: "@esbx/extension@workspace:packages/extension"
+  languageName: unknown
+  linkType: soft
+
 "@esbx/external@workspace:packages/external":
   version: 0.0.0-use.local
   resolution: "@esbx/external@workspace:packages/external"
@@ -21,7 +27,21 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@esbx/legacy@workspace:packages/legacy"
   dependencies:
-    "@swc/core": ^1.2.122
+    "@esbx/swc": 0.0.0-alpha.1
+  languageName: unknown
+  linkType: soft
+
+"@esbx/react@workspace:packages/react":
+  version: 0.0.0-use.local
+  resolution: "@esbx/react@workspace:packages/react"
+  dependencies:
+    dirname-filename-esm: ^1.1.1
+  languageName: unknown
+  linkType: soft
+
+"@esbx/reload@workspace:packages/reload":
+  version: 0.0.0-use.local
+  resolution: "@esbx/reload@workspace:packages/reload"
   languageName: unknown
   linkType: soft
 
@@ -49,6 +69,22 @@ __metadata:
     postcss: ^8.4.5
     postcss-modules: ^4.2.2
     sass: ^1.45.1
+  languageName: unknown
+  linkType: soft
+
+"@esbx/static@workspace:packages/static":
+  version: 0.0.0-use.local
+  resolution: "@esbx/static@workspace:packages/static"
+  dependencies:
+    fs-extra: ^10.0.0
+  languageName: unknown
+  linkType: soft
+
+"@esbx/swc@0.0.0-alpha.1, @esbx/swc@workspace:packages/swc":
+  version: 0.0.0-use.local
+  resolution: "@esbx/swc@workspace:packages/swc"
+  dependencies:
+    "@swc/core": ^1.2.122
   languageName: unknown
   linkType: soft
 
@@ -689,6 +725,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"dequal@npm:^2.0.0":
+  version: 2.0.2
+  resolution: "dequal@npm:2.0.2"
+  checksum: 86c7a2c59f7b0797ed397c74b5fcdb744e48fc19440b70ad6ac59f57550a96b0faef3f1cfd5760ec5e6d3f7cb101f634f1f80db4e727b1dc8389bf62d977c0a0
+  languageName: node
+  linkType: hard
+
+"diff@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "diff@npm:5.0.0"
+  checksum: f19fe29284b633afdb2725c2a8bb7d25761ea54d321d8e67987ac851c5294be4afeab532bd84531e02583a3fe7f4014aa314a3eda84f5590e7a9e6b371ef3b46
+  languageName: node
+  linkType: hard
+
+"dirname-filename-esm@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "dirname-filename-esm@npm:1.1.1"
+  checksum: 189edcefe7c3d2de25a1560c6d8eab1f3a607f3b1dd3f7e1ac3923c9c5662cabd5d8a940bb2484ca2acc595d1530d66a52926596707520d82fdc38b6b7dfe1d2
+  languageName: node
+  linkType: hard
+
 "emoji-regex@npm:^7.0.1":
   version: 7.0.3
   resolution: "emoji-regex@npm:7.0.3"
@@ -926,7 +983,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esbx@workspace:packages/cli":
+"esbx@0.0.0-alpha.1, esbx@workspace:packages/cli":
   version: 0.0.0-use.local
   resolution: "esbx@workspace:packages/cli"
   dependencies:
@@ -1355,6 +1412,13 @@ __metadata:
     graceful-fs:
       optional: true
   checksum: 7af3b8e1ac8fe7f1eccc6263c6ca14e1966fcbc74b618d3c78a0a2075579487547b94f72b7a1114e844a1e15bb00d440e5d1720bfc4612d790a6f285d5ea8354
+  languageName: node
+  linkType: hard
+
+"kleur@npm:^4.0.3":
+  version: 4.1.4
+  resolution: "kleur@npm:4.1.4"
+  checksum: 7f6db36e378045dec14acd3cbf0b1e59130c09e984ee8b8ce56dd2d2257cfff90389c1e8f8b19bd09dd5d241080566a814b4ccd99fdcef91f59ef93ec33c8a44
   languageName: node
   linkType: hard
 
@@ -1929,13 +1993,15 @@ __metadata:
   dependencies:
     "@types/node": ^17.0.8
     esbuild: ^0.14.11
+    esbx: 0.0.0-alpha.1
     tsm: ^2.2.1
     typescript: ^4.5.4
+    uvu: ^0.5.3
     wsrun: ^5.2.4
   languageName: unknown
   linkType: soft
 
-"sade@npm:^1.7.4":
+"sade@npm:^1.7.3, sade@npm:^1.7.4":
   version: 1.8.1
   resolution: "sade@npm:1.8.1"
   dependencies:
@@ -2287,6 +2353,20 @@ __metadata:
   version: 1.0.2
   resolution: "util-deprecate@npm:1.0.2"
   checksum: 474acf1146cb2701fe3b074892217553dfcf9a031280919ba1b8d651a068c9b15d863b7303cb15bd00a862b498e6cf4ad7b4a08fb134edd5a6f7641681cb54a2
+  languageName: node
+  linkType: hard
+
+"uvu@npm:^0.5.3":
+  version: 0.5.3
+  resolution: "uvu@npm:0.5.3"
+  dependencies:
+    dequal: ^2.0.0
+    diff: ^5.0.0
+    kleur: ^4.0.3
+    sade: ^1.7.3
+  bin:
+    uvu: bin.js
+  checksum: 0cf8e9e6ec79199dacc64fe0e9f82b5bf1d2308f3c54ec1aba5d1ca0a4beff4f173cae0f87bc52d35121565fd232b969fbf52cca3707e20517e62645e19b898e
   languageName: node
   linkType: hard
 

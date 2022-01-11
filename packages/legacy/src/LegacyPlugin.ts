@@ -1,29 +1,19 @@
-import swc from '@swc/core'
+import {SwcPlugin, SwcPluginOptions} from '@esbx/swc'
 import type {Plugin} from 'esbuild'
-import path from 'path'
-import fs from 'fs'
 
-export const LegacyPlugin: Plugin = {
-  name: '@esbx/legacy',
-  setup(build) {
-    const cache = new Map()
-    build.initialOptions.target = 'es5'
-    build.onLoad({filter: /\.[t|j]sx?$/}, args => {
-      if (
-        args.path.includes('core-js') ||
-        args.path.includes('@swc') ||
-        args.path.includes('regenerator-runtime')
-      ) {
-        return
-      }
-      const key = String(fs.statSync(args.path).mtimeMs)
-      const entry = cache.get(args.path)
-      if (entry && entry.key === key) return entry.result
-      const extension = path.extname(args.path)
-      const sx = extension.startsWith('.t') ? 'tsx' : 'jsx'
-      return swc
-        .transformFile(args.path, {
-          sourceMaps: 'inline',
+function plugin(options: SwcPluginOptions = {}): Plugin {
+  return {
+    name: '@esbx/legacy',
+    setup(build) {
+      const {plugins = []} = build.initialOptions
+      for (const plugin of plugins)
+        if (plugin.name === '@esbx/swc')
+          throw new Error(
+            `Cannot add legacy plugin after swc plugin, adjust its settings instead`
+          )
+      build.initialOptions.target = 'es5'
+      SwcPlugin.configure({
+        swcOptions: {
           env: {
             coreJs: '3',
             mode: 'usage',
@@ -32,24 +22,18 @@ export const LegacyPlugin: Plugin = {
             }
           },
           jsc: {
-            target: 'es5',
-            // causes '_setPrototypeOf' is undefined in ie11
-            // - app without - 410kB gzipped
-            // - app with - 397kB gzipped
-            // externalHelpers: true,
-            parser: {
-              syntax: extension.startsWith('.ts') ? 'typescript' : 'ecmascript',
-              [sx]: extension.includes('sx'),
-              dynamicImport: true
-            },
-            transform: {}
+            target: 'es5'
           }
-        })
-        .then(res => {
-          const result = {contents: res.code}
-          cache.set(args.path, {key, result})
-          return result
-        })
-    })
+        },
+        ...options
+      }).setup(build)
+    }
   }
 }
+
+export const LegacyPlugin = {...plugin(), configure: plugin}
+
+Object.defineProperty(LegacyPlugin, 'configure', {
+  enumerable: false,
+  value: plugin
+})

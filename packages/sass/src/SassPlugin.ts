@@ -12,13 +12,13 @@ type CacheEntry = {
   css: string
 }
 
-export type PluginOptions = {
+export type SassPluginOptions = {
   moduleOptions: CssModulesOptions
   scssOptions: SassOptions<'sync'>
   postCssPlugins?: Array<PostCssPlugin>
 }
 
-const defaults: PluginOptions = {
+const defaults: SassPluginOptions = {
   moduleOptions: {
     localsConvention: 'dashes'
   },
@@ -34,7 +34,7 @@ function hash(files: Array<string>) {
   return files.map(file => fs.statSync(file).mtimeMs).join('-')
 }
 
-function plugin(options: Partial<PluginOptions> = {}): Plugin {
+function plugin(options: Partial<SassPluginOptions> = {}): Plugin {
   return {
     name: 'scss-plugin',
     setup(build) {
@@ -66,40 +66,56 @@ function plugin(options: Partial<PluginOptions> = {}): Plugin {
           resolveDir: args.pluginData.resolveDir
         }
       })
-      build.onLoad({filter: /\.scss$/}, (args: OnLoadArgs):
-        | OnLoadResult
-        | Promise<OnLoadResult> => {
-        const sourceFile = args.path.split(path.sep).join('/')
-        const entry = cssCache.get(sourceFile)
-        if (entry && entry.key === hash(entry.result.watchFiles!)) {
-          return entry.result
-        }
-        const {css, loadedUrls, sourceMap} = compile(sourceFile, scssOptions)
-        const isModule = args.path.endsWith('.module.scss')
-        const watchFiles = loadedUrls.map(url => {
-          return url.pathname.substr(isWindows ? 1 : 0)
-        })
-        let cssModulesJSON: any
-        const cssPlugins = plugins.slice(0)
-        if (isModule)
-          cssPlugins.push(
-            postcssModules({
-              ...moduleOptions,
-              getJSON(_, json) {
-                cssModulesJSON = json
-              }
-            })
-          )
-        return postcss(cssPlugins)
-          .process(css, {
-            from: args.path,
-            map: enableSourceMaps && {inline: true, prev: sourceMap}
+      build.onLoad(
+        {filter: /\.scss$/},
+        (args: OnLoadArgs): OnLoadResult | Promise<OnLoadResult> => {
+          const sourceFile = args.path.split(path.sep).join('/')
+          const entry = cssCache.get(sourceFile)
+          if (entry && entry.key === hash(entry.result.watchFiles!)) {
+            return entry.result
+          }
+          const {css, loadedUrls, sourceMap} = compile(sourceFile, scssOptions)
+          const isModule = args.path.endsWith('.module.scss')
+          const watchFiles = loadedUrls.map(url => {
+            return url.pathname.substr(isWindows ? 1 : 0)
           })
-          .then(postProcess => {
-            if (!isModule) {
+          let cssModulesJSON: any
+          const cssPlugins = plugins.slice(0)
+          if (isModule)
+            cssPlugins.push(
+              postcssModules({
+                ...moduleOptions,
+                getJSON(_, json) {
+                  cssModulesJSON = json
+                }
+              })
+            )
+          return postcss(cssPlugins)
+            .process(css, {
+              from: args.path,
+              map: enableSourceMaps && {inline: true, prev: sourceMap}
+            })
+            .then(postProcess => {
+              if (!isModule) {
+                const result: OnLoadResult = {
+                  contents: postProcess.css,
+                  loader: 'css',
+                  watchFiles
+                }
+                cssCache.set(sourceFile, {
+                  key: hash(watchFiles),
+                  result,
+                  css: postProcess.css
+                })
+                return result
+              }
+              const classNames = JSON.stringify(cssModulesJSON)
+              const body = `
+              import ${JSON.stringify(PREFIX + sourceFile)}
+              export default ${classNames}
+            `
               const result: OnLoadResult = {
-                contents: postProcess.css,
-                loader: 'css',
+                contents: body,
                 watchFiles
               }
               cssCache.set(sourceFile, {
@@ -107,25 +123,10 @@ function plugin(options: Partial<PluginOptions> = {}): Plugin {
                 result,
                 css: postProcess.css
               })
-              return result
-            }
-            const classNames = JSON.stringify(cssModulesJSON)
-            const body = `
-              import ${JSON.stringify(PREFIX + sourceFile)}
-              export default ${classNames}
-            `
-            const result: OnLoadResult = {
-              contents: body,
-              watchFiles
-            }
-            cssCache.set(sourceFile, {
-              key: hash(watchFiles),
-              result,
-              css: postProcess.css
+              return {contents: body, watchFiles}
             })
-            return {contents: body, watchFiles}
-          })
-      })
+        }
+      )
     }
   }
 }

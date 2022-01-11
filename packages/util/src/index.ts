@@ -1,6 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import prettyMs from 'pretty-ms'
+import type {Plugin} from 'esbuild'
 
 export function isChildOf(child: string, parent: string) {
   const relative = path.relative(parent, child)
@@ -16,8 +17,10 @@ export function findNodeModules(dir: string): Array<string> {
     const packages = fs.readdirSync(moduleDir)
     packages.forEach(pkg => {
       if (pkg.charAt(0) === '.') return
-      const stat = fs.lstatSync(pkg)
-      if (stat.isSymbolicLink() && isChildOf(fs.readlinkSync(pkg), dir)) return
+      const pkgLocation = path.join(moduleDir, pkg)
+      const stat = fs.lstatSync(pkgLocation)
+      if (stat.isSymbolicLink() && isChildOf(fs.readlinkSync(pkgLocation), dir))
+        return
       res.push(pkg)
     })
   }
@@ -42,6 +45,17 @@ export function report(message: string, success = false) {
   console.log(`\x1b[${status}m> ${message}\x1b[39m`)
 }
 
+type List<T> = Array<T> & {add(item: T | undefined): List<T>}
+
+export function list<T>(...p: Array<T | undefined | Array<T>>): List<T> {
+  const res = p.flat().filter(Boolean) as Array<T>
+  return Object.assign(res, {
+    add(item: T | undefined) {
+      return list(...res, item)
+    }
+  })
+}
+
 export async function reportTime(
   run: () => Promise<void>,
   message: (err?: Error) => string
@@ -55,6 +69,7 @@ export async function reportTime(
     await run()
     report(`${message()}\x1b[90m in ${duration()}`, true)
   } catch (e) {
+    console.dir(e)
     report(message(e as Error))
   }
 }
