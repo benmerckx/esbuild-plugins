@@ -36,6 +36,7 @@ __metadata:
   resolution: "@esbx/react@workspace:packages/react"
   dependencies:
     "@esbx/alias": 0.0.0
+    "@esbx/util": 0.0.0
     dirname-filename-esm: ^1.1.1
   languageName: unknown
   linkType: soft
@@ -50,6 +51,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@esbx/reporter@workspace:packages/reporter"
   dependencies:
+    "@esbx/util": 0.0.0
     pretty-ms: ^7.0.1
   languageName: unknown
   linkType: soft
