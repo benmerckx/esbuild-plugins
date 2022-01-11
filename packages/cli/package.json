@@ -1,6 +1,6 @@
 {
   "name": "esbx",
-  "version": "0.0.0-alpha.1",
+  "version": "0.0.0",
   "license": "MIT",
   "repository": "git://github.com/benmerckx/esbx.git",
   "files": [
@@ -12,6 +12,9 @@
   "types": "./dist/index.d.ts",
   "sideEffects": false,
   "dependencies": {
+    "@esbx/external": "0.0.0",
+    "@esbx/static": "0.0.0",
+    "@esbx/util": "0.0.0",
     "fs-extra": "^10.0.0",
     "glob": "^7.2.0",
     "sade": "^1.7.4",

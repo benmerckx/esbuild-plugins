@@ -5,7 +5,7 @@ __metadata:
   version: 5
   cacheKey: 8
 
-"@esbx/alias@0.0.0-alpha.1, @esbx/alias@workspace:packages/alias":
+"@esbx/alias@0.0.0, @esbx/alias@workspace:packages/alias":
   version: 0.0.0-use.local
   resolution: "@esbx/alias@workspace:packages/alias"
   languageName: unknown
@@ -17,7 +17,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@esbx/external@workspace:packages/external":
+"@esbx/external@0.0.0, @esbx/external@workspace:packages/external":
   version: 0.0.0-use.local
   resolution: "@esbx/external@workspace:packages/external"
   languageName: unknown
@@ -27,7 +27,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@esbx/legacy@workspace:packages/legacy"
   dependencies:
-    "@esbx/swc": 0.0.0-alpha.1
+    "@esbx/swc": 0.0.0
   languageName: unknown
   linkType: soft
 
@@ -35,7 +35,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@esbx/react@workspace:packages/react"
   dependencies:
-    "@esbx/alias": 0.0.0-alpha.1
+    "@esbx/alias": 0.0.0
     dirname-filename-esm: ^1.1.1
   languageName: unknown
   linkType: soft
@@ -73,7 +73,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@esbx/static@workspace:packages/static":
+"@esbx/static@0.0.0, @esbx/static@workspace:packages/static":
   version: 0.0.0-use.local
   resolution: "@esbx/static@workspace:packages/static"
   dependencies:
@@ -81,7 +81,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@esbx/swc@0.0.0-alpha.1, @esbx/swc@workspace:packages/swc":
+"@esbx/swc@0.0.0, @esbx/swc@workspace:packages/swc":
   version: 0.0.0-use.local
   resolution: "@esbx/swc@workspace:packages/swc"
   dependencies:
@@ -89,7 +89,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@esbx/util@workspace:packages/util":
+"@esbx/util@0.0.0, @esbx/util@workspace:packages/util":
   version: 0.0.0-use.local
   resolution: "@esbx/util@workspace:packages/util"
   languageName: unknown
@@ -984,10 +984,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esbx@0.0.0-alpha.1, esbx@workspace:packages/cli":
+"esbx@0.0.0, esbx@workspace:packages/cli":
   version: 0.0.0-use.local
   resolution: "esbx@workspace:packages/cli"
   dependencies:
+    "@esbx/external": 0.0.0
+    "@esbx/static": 0.0.0
+    "@esbx/util": 0.0.0
     "@types/fs-extra": ^9.0.13
     "@types/glob": ^7.1.4
     "@types/sade": ^1.7.3
@@ -1994,7 +1997,7 @@ __metadata:
   dependencies:
     "@types/node": ^17.0.8
     esbuild: ^0.14.11
-    esbx: 0.0.0-alpha.1
+    esbx: 0.0.0
     tsm: ^2.2.1
     typescript: ^4.5.4
     uvu: ^0.5.3
