@@ -8,7 +8,7 @@ export function publishAction() {
   const packages = findPackages(glob.sync, root.workspaces || [])
   for (const pkg of packages) {
     try {
-      execSync('npm publish --access public --tolerate-republish', {
+      execSync('npm publish --verbose --access public --tolerate-republish', {
         stdio: 'inherit',
         cwd: pkg
       })

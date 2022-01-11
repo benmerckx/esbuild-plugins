@@ -1,4 +1,4 @@
-import {findPackages} from '@esbx/util'
+import {findPackages, report} from '@esbx/util'
 import fs from 'fs-extra'
 import glob from 'glob'
 import path from 'path'
@@ -27,4 +27,5 @@ export function versionAction(semver: string) {
       JSON.stringify(meta, null, 2)
     )
   }
+  report(`bumped version to ${semver}`)
 }
