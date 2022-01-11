@@ -11,6 +11,7 @@
   "types": "./dist/index.d.ts",
   "sideEffects": false,
   "dependencies": {
+    "@esbx/util": "0.0.0",
     "pretty-ms": "^7.0.1"
   }
 }

@@ -1,7 +1,6 @@
 import fs from 'fs'
 import path from 'path'
 import prettyMs from 'pretty-ms'
-import type {Plugin} from 'esbuild'
 
 export function isChildOf(child: string, parent: string) {
   const relative = path.relative(parent, child)
