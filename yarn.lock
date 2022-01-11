@@ -11,7 +11,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@esbx/extension@workspace:packages/extension":
+"@esbx/extension@0.0.0, @esbx/extension@workspace:packages/extension":
   version: 0.0.0-use.local
   resolution: "@esbx/extension@workspace:packages/extension"
   languageName: unknown
@@ -990,6 +990,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "esbx@workspace:packages/cli"
   dependencies:
+    "@esbx/extension": 0.0.0
     "@esbx/external": 0.0.0
     "@esbx/static": 0.0.0
     "@esbx/util": 0.0.0
