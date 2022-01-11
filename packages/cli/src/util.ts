@@ -1,7 +1,8 @@
+import {ExternalPlugin} from '@esbx/external'
+import crypto from 'crypto'
 import {build} from 'esbuild'
 import fs from 'fs-extra'
 import path from 'path'
-import {ExternalPlugin} from '@esbx/external'
 
 export function orFail<T>(
   run: () => T,
@@ -24,18 +25,21 @@ export function pkgMeta(location: string) {
 export async function loadConfig(location: string) {
   const configLocation = path.join(location, '.esbx.ts')
   if (!fs.existsSync(configLocation)) return {}
-  const {outputFiles} = await build({
+  const outfile = path.posix.join(
+    process.cwd(),
+    'node_modules',
+    crypto.randomBytes(16).toString('hex') + '.mjs'
+  )
+  await build({
     format: 'esm',
     target: 'esnext',
     platform: 'node',
     bundle: true,
     plugins: [ExternalPlugin],
     entryPoints: [configLocation],
-    write: false
+    outfile
   })
-  const uri =
-    'data:text/javascript;base64,' +
-    Buffer.from(outputFiles[0].contents).toString('base64')
-  const exports = await import(uri)
+  const exports = await import(`file://${outfile}`)
+  fs.removeSync(outfile)
   return exports.config || {}
 }

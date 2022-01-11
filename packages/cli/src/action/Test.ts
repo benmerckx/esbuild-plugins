@@ -1,8 +1,10 @@
+import {StaticPlugin} from '@esbx/static'
 import {findNodeModules, findPackages, list} from '@esbx/util'
+import crypto from 'crypto'
 import {build} from 'esbuild'
+import fs from 'fs-extra'
 import glob from 'glob'
 import path from 'path'
-import {StaticPlugin} from '@esbx/static'
 import {loadConfig, pkgMeta} from '../util'
 
 export async function testAction(pattern?: string) {
@@ -39,12 +41,17 @@ export async function testAction(pattern?: string) {
     })
   `
   const external = findNodeModules(process.cwd())
+  const outfile = path.posix.join(
+    process.cwd(),
+    'node_modules',
+    crypto.randomBytes(16).toString('hex') + '.mjs'
+  )
   await build({
     bundle: true,
     format: 'esm',
     platform: 'node',
     ...config,
-    outfile: 'bin/test.js',
+    outfile,
     banner: {
       js: `import "data:text/javascript,process.argv.push('.bin/uvu')" // Trigger isCLI`
     },
@@ -61,6 +68,6 @@ export async function testAction(pattern?: string) {
       sourcefile: 'test.js'
     }
   })
-  const testFile = 'file://' + path.join(process.cwd(), 'bin/test.js')
-  await import(testFile)
+  await import(`file://${outfile}`)
+  fs.removeSync(outfile)
 }
