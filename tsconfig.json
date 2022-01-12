@@ -16,7 +16,8 @@
     "esModuleInterop": true,
     "importHelpers": true,
     "paths": {
-      "@esbx/*": ["./packages/*/src"]
+      "@esbx/*": ["./packages/*/src"],
+      "esbx": ["./packages/cli/src"]
     }
   },
   "include": ["packages"],

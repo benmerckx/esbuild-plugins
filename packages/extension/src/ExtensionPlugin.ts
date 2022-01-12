@@ -16,7 +16,10 @@ export const ExtensionPlugin: Plugin = {
     const outExtension = build.initialOptions.outExtension?.['.js'] || '.js'
     build.onResolve({filter: /.*/}, args => {
       if (args.kind === 'entry-point') return
-      if (args.path.endsWith(outExtension) || !args.path.startsWith('.'))
+      const isLocal = args.path.startsWith('.')
+      const hasExtension = args.path.split('/').pop()?.includes('.')
+      if (isLocal && hasExtension) return
+      if (args.path.endsWith(outExtension) || !isLocal)
         return {path: args.path, external: true}
       return {path: args.path + outExtension, external: true}
     })

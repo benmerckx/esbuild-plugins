@@ -8,6 +8,7 @@ import {tsconfigResolverSync} from 'tsconfig-resolver'
 import which from 'which'
 import {ExtensionPlugin} from '@esbx/extension'
 import {loadConfig, orFail, pkgMeta} from '../util'
+import {ExternalPlugin} from '@esbx/external'
 
 type BuildOptions = {
   watch?: boolean
@@ -56,23 +57,18 @@ export async function buildAction(options: BuildOptions) {
       if (fs.existsSync(typeDir)) await fs.copy(typeDir, dist)
     }
     reportTime(
-      async () => {
-        for (const entryPoint of entryPoints) {
-          if (entryPoint.endsWith('.d.ts')) continue
-          const sub = path.dirname(entryPoint).substr('src/'.length)
-          await build({
-            format: 'esm',
-            loader: {'.json': 'json'},
-            ...config,
-            absWorkingDir: cwd,
-            bundle: true,
-            sourcemap: true,
-            entryPoints: [entryPoint],
-            outdir: path.join('dist', sub),
-            plugins: list(ExtensionPlugin, config.plugins)
-          })
-        }
-      },
+      () =>
+        build({
+          format: 'esm',
+          loader: {'.json': 'json'},
+          ...config,
+          absWorkingDir: cwd,
+          bundle: true,
+          sourcemap: true,
+          entryPoints: entryPoints.filter(entry => !entry.endsWith('.d.ts')),
+          outdir: 'dist',
+          plugins: list(config.plugins, ExtensionPlugin)
+        }),
       err => {
         if (err) return `${meta.name} has errors`
         else return `${meta.name} built`

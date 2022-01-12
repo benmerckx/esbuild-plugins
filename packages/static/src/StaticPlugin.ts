@@ -12,28 +12,37 @@ function plugin(options: StaticPluginOptions = {}): Plugin {
   return {
     name: '@esbx/static',
     setup(build) {
-      const {entryPoints, outdir, outfile} = build.initialOptions
+      const {
+        entryPoints,
+        outdir,
+        outfile,
+        absWorkingDir = process.cwd()
+      } = build.initialOptions
       if (!entryPoints && !options.sources) return
-      const locations = Array.isArray(entryPoints)
-        ? entryPoints
-        : entryPoints
-        ? Object.values(entryPoints)
-        : options.sources!
+      const locations = new Set(
+        (Array.isArray(entryPoints)
+          ? entryPoints
+          : entryPoints
+          ? Object.values(entryPoints)
+          : options.sources!
+        ).map(path.dirname)
+      )
       const outputDir = outdir || (outfile && path.dirname(outfile))
       if (!outputDir) throw new Error('StaticPlugin requires outfile or outdir')
-      build.onStart(async () => {
+      let trigger: Promise<any>
+      build.onStart(() => {
         const tasks = []
         for (const location of locations) {
-          const source = path.join(path.dirname(location), dir)
+          const source = path.join(absWorkingDir, location, dir)
+          const target = path.join(absWorkingDir, outputDir, dir)
           if (fs.existsSync(source)) {
-            tasks.push(
-              fs.copy(source, path.join(outputDir, dir), {overwrite: true})
-            )
+            const task = fs.copy(source, target, {overwrite: true})
+            tasks.push(task)
           }
         }
-        if (tasks.length === 0) return
-        await Promise.all(tasks)
+        trigger = Promise.all(tasks)
       })
+      build.onEnd(() => trigger)
     }
   }
 }

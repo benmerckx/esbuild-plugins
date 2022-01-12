@@ -56,7 +56,7 @@ export function list<T>(...p: Array<T | undefined | Array<T>>): List<T> {
 }
 
 export async function reportTime(
-  run: () => Promise<void>,
+  run: () => Promise<any>,
   message: (err?: Error) => string
 ) {
   const start = process.hrtime()

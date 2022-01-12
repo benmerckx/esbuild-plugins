@@ -3,7 +3,7 @@ import path from 'path'
 import fs from 'fs'
 import postcss, {Plugin as PostCssPlugin} from 'postcss'
 import postcssModules from 'postcss-modules'
-import {compile, Options as SassOptions} from 'sass'
+import sass, {Options as SassOptions} from 'sass'
 
 type CssModulesOptions = Parameters<postcssModules>[0]
 type CacheEntry = {
@@ -27,16 +27,17 @@ const defaults: SassPluginOptions = {
   }
 }
 
-const PREFIX = 'scss-plugin-cache'
 const isWindows = process.platform === 'win32'
 
 function hash(files: Array<string>) {
   return files.map(file => fs.statSync(file).mtimeMs).join('-')
 }
 
+const PREFIX = '@esbx/sass:'
+
 function plugin(options: Partial<SassPluginOptions> = {}): Plugin {
   return {
-    name: 'scss-plugin',
+    name: '@esbx/sass',
     setup(build) {
       const cssCache = new Map<string, CacheEntry>()
       const enableSourceMaps = Boolean(build.initialOptions.sourcemap)
@@ -50,7 +51,7 @@ function plugin(options: Partial<SassPluginOptions> = {}): Plugin {
         ...options.moduleOptions
       }
       const plugins = options?.postCssPlugins || []
-      build.onResolve({filter: new RegExp(`${PREFIX}.*`)}, args => {
+      build.onResolve({filter: /@esbx\/sass:.*/}, args => {
         return {
           path: args.path.substr(PREFIX.length),
           namespace: PREFIX,
@@ -74,7 +75,10 @@ function plugin(options: Partial<SassPluginOptions> = {}): Plugin {
           if (entry && entry.key === hash(entry.result.watchFiles!)) {
             return entry.result
           }
-          const {css, loadedUrls, sourceMap} = compile(sourceFile, scssOptions)
+          const {css, loadedUrls, sourceMap} = sass.compile(
+            sourceFile,
+            scssOptions
+          )
           const isModule = args.path.endsWith('.module.scss')
           const watchFiles = loadedUrls.map(url => {
             return url.pathname.substr(isWindows ? 1 : 0)
@@ -111,9 +115,9 @@ function plugin(options: Partial<SassPluginOptions> = {}): Plugin {
               }
               const classNames = JSON.stringify(cssModulesJSON)
               const body = `
-              import ${JSON.stringify(PREFIX + sourceFile)}
-              export default ${classNames}
-            `
+                import ${JSON.stringify(name + sourceFile)}
+                export default ${classNames}
+              `
               const result: OnLoadResult = {
                 contents: body,
                 watchFiles
