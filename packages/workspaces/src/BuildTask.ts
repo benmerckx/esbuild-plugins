@@ -68,7 +68,7 @@ function task(
           )
           if (fs.existsSync(typeDir)) await fs.copy(typeDir, dist)
         }
-        reportTime(
+        return reportTime(
           () =>
             build({
               format: 'esm',
