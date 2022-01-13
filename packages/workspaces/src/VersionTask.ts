@@ -26,7 +26,7 @@ export const VersionTask: Task<(semver: string) => void> = {
       meta.version = semver
       fs.writeFileSync(
         path.join(location, 'package.json'),
-        JSON.stringify(meta, null, 2)
+        JSON.stringify(meta, null, 2) + '\n'
       )
     }
     report(`bumped version to ${semver}`)
