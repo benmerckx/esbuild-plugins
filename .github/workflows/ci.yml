@@ -25,4 +25,4 @@ jobs:
         run: |
           yarn bump ${GITHUB_REF#refs/tags/v}
           npm config set //registry.npmjs.org/:_authToken ${{secrets.NPM_AUTH_TOKEN}}
-          yarn publish
+          npm publish --access public --tolerate-republish -ws
