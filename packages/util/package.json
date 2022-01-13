@@ -12,5 +12,8 @@
     "./package.json": "./package.json"
   },
   "types": "./dist/index.d.ts",
-  "sideEffects": false
+  "sideEffects": false,
+  "dependencies": {
+    "pretty-ms": "^7.0.1"
+  }
 }

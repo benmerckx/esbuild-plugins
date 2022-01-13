@@ -27,14 +27,16 @@ function plugin(options: StaticPluginOptions = {}): Plugin {
           : options.sources!
         ).map(path.dirname)
       )
+      const makeAbs = (p: string) =>
+        path.isAbsolute(p) ? p : path.join(absWorkingDir, p)
       const outputDir = outdir || (outfile && path.dirname(outfile))
       if (!outputDir) throw new Error('StaticPlugin requires outfile or outdir')
       let trigger: Promise<any>
       build.onStart(() => {
         const tasks = []
         for (const location of locations) {
-          const source = path.join(absWorkingDir, location, dir)
-          const target = path.join(absWorkingDir, outputDir, dir)
+          const source = path.join(makeAbs(location), dir)
+          const target = path.join(makeAbs(outputDir), dir)
           if (fs.existsSync(source)) {
             const task = fs.copy(source, target, {overwrite: true})
             tasks.push(task)

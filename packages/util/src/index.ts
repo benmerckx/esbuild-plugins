@@ -29,21 +29,6 @@ export function findNodeModules(dir: string): Array<string> {
   return res
 }
 
-export function findPackages(
-  glob: (input: string) => Array<string>,
-  locations: Array<string>
-) {
-  return locations
-    .map(location => `${location}/package.json`)
-    .flatMap(pkg => glob(pkg))
-    .map(pkg => pkg.substr(0, pkg.length - '/package.json'.length))
-}
-
-export function report(message: string, success = false) {
-  const status = success ? 36 : 90
-  console.log(`\x1b[${status}m> ${message}\x1b[39m`)
-}
-
 type List<T> = Array<T> & {add(item: T | undefined): List<T>}
 
 export function list<T>(...p: Array<T | undefined | Array<T>>): List<T> {
@@ -55,8 +40,13 @@ export function list<T>(...p: Array<T | undefined | Array<T>>): List<T> {
   })
 }
 
-export async function reportTime(
-  run: () => Promise<any>,
+export function report(message: string, success = false) {
+  const status = success ? 36 : 90
+  console.log(`\x1b[${status}m> ${message}\x1b[39m`)
+}
+
+export async function reportTime<T>(
+  run: () => Promise<T>,
   message: (err?: Error) => string
 ) {
   const start = process.hrtime()
