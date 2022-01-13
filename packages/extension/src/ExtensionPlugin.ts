@@ -1,5 +1,4 @@
 import type {OnResolveArgs, Plugin} from 'esbuild'
-import path from 'path'
 
 export type ExternalPluginResponse = void | boolean | string
 
@@ -17,7 +16,7 @@ export const ExtensionPlugin: Plugin = {
     const outExtension = build.initialOptions.outExtension?.['.js'] || '.js'
     build.onResolve({filter: /.*/}, args => {
       if (args.kind === 'entry-point') return
-      const isLocal = !path.isAbsolute(args.path)
+      const isLocal = args.path.startsWith('./') || args.path.startsWith('../')
       if (args.path.endsWith(outExtension) || !isLocal)
         return {path: args.path, external: true}
       return {path: args.path + outExtension, external: true}
