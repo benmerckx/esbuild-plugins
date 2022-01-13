@@ -75,8 +75,9 @@ function task(config: TestTaskConfig = {}) {
           sourcefile: 'test.js'
         }
       })
-      await import(`file://${outfile}`)
-      fs.removeSync(outfile)
+      await import(`file://${outfile}`).finally(() =>
+        fs.promises.unlink(outfile)
+      )
     }
   }
 }

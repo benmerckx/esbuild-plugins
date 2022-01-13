@@ -28,7 +28,9 @@ export async function loadTasks(
     entryPoints: [configLocation],
     outfile
   })
-  const exports = await import(`file://${outfile}`)
+  const exports = await import(`file://${outfile}`).finally(() =>
+    fs.promises.unlink(outfile)
+  )
   return exports
 }
 
