@@ -34,7 +34,7 @@ function plugin(options: ReporterPluginOptions = {}): Plugin {
             process.stdout.moveCursor(0, -1)
             process.stdout.clearLine(1)
           }
-          report(`${title} completed in ${duration}`, true)
+          report(`${title} completed\x1b[90m in ${duration}`, true)
         }
       })
     }
