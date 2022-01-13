@@ -14,12 +14,14 @@ export const ExtensionPlugin: Plugin = {
   setup(build) {
     build.initialOptions.bundle = true
     const outExtension = build.initialOptions.outExtension?.['.js'] || '.js'
-    build.onResolve({filter: /.*/}, args => {
-      if (args.kind === 'entry-point') return
-      const isLocal = args.path.startsWith('./') || args.path.startsWith('../')
-      if (args.path.endsWith(outExtension) || !isLocal)
-        return {path: args.path, external: true}
-      return {path: args.path + outExtension, external: true}
+    build.onResolve({filter: /.*/}, ({kind, path}) => {
+      if (kind === 'entry-point') return
+      const isLocal = path.startsWith('./') || path.startsWith('../')
+      const hasOutExtension = path.endsWith(outExtension)
+      const hasExtension = path.split('/').pop()?.includes('.')
+      if (isLocal && hasExtension && !hasOutExtension) return
+      if (hasOutExtension || !isLocal) return {path, external: true}
+      return {path: path + outExtension, external: true}
     })
   }
 }
