@@ -10,9 +10,6 @@
   "exports": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "sideEffects": false,
-  "devDependencies": {
-    "@types/sass": "^1.43.1"
-  },
   "dependencies": {
     "postcss": "^8.4.5",
     "postcss-modules": "^4.2.2",

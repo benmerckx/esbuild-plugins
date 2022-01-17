@@ -70,7 +70,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@esbx/sass@workspace:packages/sass"
   dependencies:
-    "@types/sass": ^1.43.1
     postcss: ^8.4.5
     postcss-modules: ^4.2.2
     sass: ^1.45.1
@@ -415,15 +414,6 @@ __metadata:
   dependencies:
     "@types/mri": "*"
   checksum: b706688c62c52f2adc3b2ce620667cbe6bb69d2da30df6d4381ce64cdecc593019b772357ad25f371debbd697107dc86b25fb533df88e281ad3bcfd0284cc162
-  languageName: node
-  linkType: hard
-
-"@types/sass@npm:^1.43.1":
-  version: 1.43.1
-  resolution: "@types/sass@npm:1.43.1"
-  dependencies:
-    "@types/node": "*"
-  checksum: 19eb71acc4b0d7db2170732a51ad18a34007021f42069652a5be8a3e3a448a470d2f970b9e85f734d1896bf3a25e48fb5132b4a989c101eb5df21cc171d426c5
   languageName: node
   linkType: hard
 
