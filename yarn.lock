@@ -28,6 +28,7 @@ __metadata:
   resolution: "@esbx/legacy@workspace:packages/legacy"
   dependencies:
     "@esbx/swc": 0.0.0
+    core-js: ^3.15.2
   languageName: unknown
   linkType: soft
 
@@ -699,6 +700,13 @@ __metadata:
   version: 1.1.0
   resolution: "console-control-strings@npm:1.1.0"
   checksum: 8755d76787f94e6cf79ce4666f0c5519906d7f5b02d4b884cf41e11dcd759ed69c57da0670afd9236d229a46e0f9cf519db0cd829c6dca820bb5a5c3def584ed
+  languageName: node
+  linkType: hard
+
+"core-js@npm:^3.15.2":
+  version: 3.20.3
+  resolution: "core-js@npm:3.20.3"
+  checksum: 2106cdfb1330abf9e27d577666fc0421feafe8c39bb5af90a63af16e9706c767a7e3a82edc21ce3ed6b9d806f3200d1cf6cc3d0597a8c0af12dbec287c781d65
   languageName: node
   linkType: hard
 
