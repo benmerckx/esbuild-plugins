@@ -14,5 +14,8 @@
     "@esbx/alias": "0.0.0",
     "@esbx/util": "0.0.0",
     "dirname-filename-esm": "^1.1.1"
+  },
+  "devDependencies": {
+    "preact": "^10.6.4"
   }
 }
