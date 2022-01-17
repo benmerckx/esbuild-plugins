@@ -3,7 +3,9 @@ import path from 'path'
 import fs from 'fs-extra'
 
 export type StaticPluginOptions = {
+  /** Defaults to 'static' */
   destination?: string
+  /** Set source dir in case no entryPoints were set */
   sources?: Array<string>
 }
 

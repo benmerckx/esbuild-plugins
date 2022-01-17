@@ -4,6 +4,7 @@ export type ExternalPluginResponse = void | boolean | string
 
 export type ExternalPluginOptions = {
   filter?: RegExp
+  /** Boolean returns marks import as external, string return rewrites import */
   onResolve?: (
     args: OnResolveArgs
   ) => ExternalPluginResponse | Promise<ExternalPluginResponse>

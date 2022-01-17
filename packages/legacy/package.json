@@ -11,6 +11,7 @@
   "types": "./dist/index.d.ts",
   "sideEffects": false,
   "dependencies": {
+    "core-js": "^3.15.2",
     "@esbx/swc": "0.0.0"
   }
 }

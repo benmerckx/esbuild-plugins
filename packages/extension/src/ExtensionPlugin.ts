@@ -1,13 +1,5 @@
-import type {OnResolveArgs, Plugin} from 'esbuild'
+import type {Plugin} from 'esbuild'
 
-export type ExternalPluginResponse = void | boolean | string
-
-export type ExternalPluginOptions = {
-  filter?: RegExp
-  onResolve?: (
-    args: OnResolveArgs
-  ) => ExternalPluginResponse | Promise<ExternalPluginResponse>
-}
 // https://github.com/evanw/esbuild/issues/622#issuecomment-769462611
 export const ExtensionPlugin: Plugin = {
   name: '@esbx/extension',
