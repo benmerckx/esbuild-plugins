@@ -7,7 +7,7 @@
   "scripts": {
     "build": "esbuild packages/static/src/*.ts --log-level=silent --outdir=packages/static/dist && esbuild packages/util/src/*.ts --log-level=silent --outdir=packages/util/dist && esbuild packages/external/src/*.ts --log-level=silent --outdir=packages/external/dist && esbuild packages/extension/src/*.ts --log-level=silent --outdir=packages/extension/dist && esbuild packages/util/src/*.ts --log-level=silent --outdir=packages/util/dist && esbuild packages/workspaces/src/*.ts --log-level=silent --outdir=packages/workspaces/dist && esbuild packages/extension/src/*.ts --log-level=silent --outdir=packages/extension/dist && tsm ./packages/cli/src/bin.ts build",
     "test": "yarn build --skip-types && esbx test",
-    "bump": "yarn build --skip-types && esbx version",
+    "bump": "yarn build && esbx version",
     "publish": "yarn build && esbx publish"
   },
   "dependencies": {
