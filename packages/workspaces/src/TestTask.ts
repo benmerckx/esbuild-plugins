@@ -8,19 +8,20 @@ import path from 'path'
 import {getManifest, getWorkspaces} from './util.js'
 
 export type TestTaskConfig = {
+  globPattern?: string
   buildOptions?: BuildOptions
 }
 
 function task(config: TestTaskConfig = {}) {
+  const globPattern = config.globPattern || '/test/**/*.{ts,tsx}'
   return {
     command: 'test [pattern]',
     describe: 'Test workspaces',
     async action(pattern?: string) {
       const filter = (pattern || 'Test').toLowerCase()
-      const root = getManifest(process.cwd())
       const workspaces = getWorkspaces(process.cwd())
       const files = workspaces.flatMap(location =>
-        glob.sync(`${location}/test/**/*.{ts,tsx}`)
+        glob.sync(location + globPattern)
       )
       const modules = files.filter(file => {
         return path.basename(file).toLowerCase().includes(filter)
@@ -57,7 +58,7 @@ function task(config: TestTaskConfig = {}) {
         bundle: true,
         format: 'esm',
         platform: 'node',
-        ...config,
+        ...(config.buildOptions || {}),
         outfile,
         banner: {
           js: `import "data:text/javascript,process.argv.push('.bin/uvu')" // Trigger isCLI`
