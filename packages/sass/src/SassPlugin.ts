@@ -115,7 +115,7 @@ function plugin(options: Partial<SassPluginOptions> = {}): Plugin {
               }
               const classNames = JSON.stringify(cssModulesJSON)
               const body = `
-                import ${JSON.stringify(name + sourceFile)}
+                import ${JSON.stringify(PREFIX + sourceFile)}
                 export default ${classNames}
               `
               const result: OnLoadResult = {
