@@ -8,9 +8,11 @@ import glob from 'glob'
 import path from 'path'
 import {tsconfigResolverSync, TsConfigResult} from 'tsconfig-resolver'
 import which from 'which'
-import {getWorkspaces, orFail} from './util.js'
+import {getManifest, getWorkspaces, orFail} from './util.js'
 
 export type BuildTaskConfig = {
+  /** Exclude workspaces from building */
+  exclude?: Array<string>
   buildOptions?: BuildOptions
 }
 
@@ -38,6 +40,7 @@ function createTypes() {
 function task(
   config: BuildTaskConfig = {}
 ): Task<(options: BuildTaskOptions) => Promise<void>> {
+  const excluded = new Set(config.exclude || [])
   return {
     command: 'build',
     description: 'Build workspaces',
@@ -72,16 +75,15 @@ function task(
           () =>
             build({
               format: 'esm',
-              loader: {'.json': 'json'},
-              ...config.buildOptions,
-              absWorkingDir: cwd,
+              outdir: 'dist',
               bundle: true,
               sourcemap: true,
+              absWorkingDir: cwd,
               entryPoints: entryPoints.filter(
                 entry => !entry.endsWith('.d.ts')
               ),
-              outdir: 'dist',
-              plugins: list(config.buildOptions?.plugins, ExtensionPlugin)
+              plugins: [ExtensionPlugin],
+              ...config.buildOptions
             }),
           err => {
             if (err) return `${meta.name} has errors`
@@ -90,8 +92,13 @@ function task(
         )
       }
       for (const workspace of workspaces) {
+        const meta = getManifest(workspace)
         const isSelected =
-          selected.length > 0 ? selected.some(w => workspace.includes(w)) : true
+          meta &&
+          !excluded.has(meta.name) &&
+          (selected.length > 0
+            ? selected.some(w => workspace.includes(w))
+            : true)
         if (isSelected) await buildPackage(process.cwd(), workspace)
       }
     }
