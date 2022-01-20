@@ -58,12 +58,12 @@ function task(config: TestTaskConfig = {}) {
         bundle: true,
         format: 'esm',
         platform: 'node',
+        external,
         ...(config.buildOptions || {}),
         outfile,
         banner: {
           js: `import "data:text/javascript,process.argv.push('.bin/uvu')" // Trigger isCLI`
         },
-        external: list(external, config.buildOptions?.external),
         plugins: list(
           config.buildOptions?.plugins,
           StaticPlugin.configure({

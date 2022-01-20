@@ -18,7 +18,6 @@
     "fs-extra": "^10.0.0",
     "glob": "^7.2.0",
     "tsconfig-resolver": "^3.0.1",
-    "tsm": "^2.1.3",
     "which": "^2.0.2"
   },
   "devDependencies": {
