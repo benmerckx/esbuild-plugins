@@ -3,7 +3,7 @@ import path from 'path'
 import fs from 'fs'
 import postcss, {Plugin as PostCssPlugin} from 'postcss'
 import postcssModules from 'postcss-modules'
-import sass, {Options as SassOptions} from 'sass'
+import sass, {Options as SassOptions} from 'sass-embedded'
 
 type CssModulesOptions = Parameters<postcssModules>[0]
 type CacheEntry = {
@@ -14,7 +14,7 @@ type CacheEntry = {
 
 export type SassPluginOptions = {
   moduleOptions: CssModulesOptions
-  scssOptions: SassOptions<'sync'>
+  scssOptions: SassOptions<'async'>
   postCssPlugins?: Array<PostCssPlugin>
 }
 
@@ -69,19 +69,19 @@ function plugin(options: Partial<SassPluginOptions> = {}): Plugin {
       })
       build.onLoad(
         {filter: /\.scss$/},
-        (args: OnLoadArgs): OnLoadResult | Promise<OnLoadResult> => {
+        async (args: OnLoadArgs): Promise<OnLoadResult> => {
           const sourceFile = args.path.split(path.sep).join('/')
           const entry = cssCache.get(sourceFile)
           if (entry && entry.key === hash(entry.result.watchFiles!)) {
             return entry.result
           }
-          const {css, loadedUrls, sourceMap} = sass.compile(
+          const {css, loadedUrls, sourceMap} = await sass.compileAsync(
             sourceFile,
             scssOptions
           )
           const isModule = args.path.endsWith('.module.scss')
           const watchFiles = loadedUrls.map(url => {
-            return url.pathname.substr(isWindows ? 1 : 0)
+            return url.pathname.substring(isWindows ? 1 : 0)
           })
           let cssModulesJSON: any
           const cssPlugins = plugins.slice(0)

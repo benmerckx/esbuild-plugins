@@ -13,6 +13,6 @@
   "dependencies": {
     "postcss": "^8.4.5",
     "postcss-modules": "^4.2.2",
-    "sass": "^1.45.1"
+    "sass-embedded": "^1.49.7"
   }
 }
