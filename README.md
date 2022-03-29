@@ -26,6 +26,25 @@ await build({
 })
 ```
 
+## [@esbx/eval](packages/eval)
+
+Evaluate and then bundle the default export as JavaScript.
+
+```ts
+// Example: evaluate eval.js
+import {EvalPlugin} from '@esbx/eval'
+await build({
+  // ...
+  plugins: [EvalPlugin]
+})
+// eval.js
+export default 'console.log("hello")'
+// main.js
+import 'eval:./eval.js'
+// -> out.js
+console.log('hello')
+```
+
 ## [@esbx/extension](packages/extension)
 
 Adds the `.js` out extension (configureable through [outExtension](https://esbuild.github.io/api/#out-extension)) to relative imports and marks them as external.
@@ -87,7 +106,7 @@ await build({
 
 ## [@esbx/react](packages/react)
 
-Injects `React` import automatically (no need to import `React` in to use JSX).
+Injects `React` import automatically (no need to import `React` to use JSX).
 
 ```ts
 type ReactPluginOptions = {

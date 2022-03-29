@@ -8,6 +8,8 @@ export type ExternalPluginOptions = {
   onResolve?: (
     args: OnResolveArgs
   ) => ExternalPluginResponse | Promise<ExternalPluginResponse>
+  /** Resolve every external import to an absolute file url, useful when evaluating code */
+  makeAbsolute?: boolean
 }
 
 function plugin(options: ExternalPluginOptions = {}): Plugin {
@@ -17,7 +19,15 @@ function plugin(options: ExternalPluginOptions = {}): Plugin {
     setup(build) {
       build.onResolve({filter}, async args => {
         if (args.kind === 'entry-point') return
-        if (!options.onResolve) return {path: args.path, external: true}
+        if (!options.onResolve) {
+          if (options.makeAbsolute) {
+            const resolved = await build.resolve(args.path, {
+              resolveDir: args.resolveDir
+            })
+            return {path: `file://${resolved.path}`, external: true}
+          }
+          return {path: args.path, external: true}
+        }
         const result = await options.onResolve(args)
         if (typeof result === 'string') return {path: result, external: true}
         if (result) return {path: args.path, external: true}
