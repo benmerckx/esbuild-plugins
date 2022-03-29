@@ -27,7 +27,7 @@ export const ReloadPlugin: Plugin = {
         const info = server.address()
         if (info && typeof info === 'object') {
           build.initialOptions.banner = {
-            js: `(() => new EventSource('http://127.0.0.1:${info.port}').onmessage = () => location.reload())();`
+            js: `(() => typeof EventSource !== 'undefined' && new EventSource('http://127.0.0.1:${info.port}').onmessage = () => location.reload())();`
           }
         }
         resolve()
