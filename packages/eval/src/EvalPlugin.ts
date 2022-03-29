@@ -18,6 +18,7 @@ export async function evaluate(file: string, buildOptions?: BuildOptions) {
     ...options,
     entryPoints: {out: file},
     outdir: '.',
+    inject: undefined,
     plugins: list(
       ExternalPlugin.configure({makeAbsolute: true}),
       options.plugins
