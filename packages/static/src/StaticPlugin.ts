@@ -40,6 +40,7 @@ function plugin(options: StaticPluginOptions = {}): Plugin {
           const source = path.join(makeAbs(location), dir)
           const target = path.join(makeAbs(outputDir), dir)
           if (fs.existsSync(source)) {
+            if (!fs.existsSync(target)) fs.mkdirSync(target, {recursive: true})
             const task = fs.copy(source, target, {overwrite: true})
             tasks.push(task)
           }
