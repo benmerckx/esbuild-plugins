@@ -7,10 +7,10 @@ import {dirname} from 'dirname-filename-esm'
 const __dirname = dirname(import.meta)
 
 test('evaluate', async () => {
-  const {exports} = await evaluate('./static/color.js', {
+  const {exports} = await evaluate('./static/external.js', {
     absWorkingDir: __dirname
   })
-  assert.equal(exports.redText, '\u001b[31mred text\u001b[39m')
+  assert.equal(exports.time, '1m')
 })
 
 test('test eval plugin', async () => {
