@@ -24,7 +24,8 @@ function plugin(options: ExternalPluginOptions = {}): Plugin {
             const resolved = await build.resolve(args.path, {
               resolveDir: args.resolveDir
             })
-            return {path: `file://${resolved.path}`, external: true}
+            if (resolved.errors.length === 0 && !resolved.external)
+              return {path: `file://${resolved.path}`, external: true}
           }
           return {path: args.path, external: true}
         }
