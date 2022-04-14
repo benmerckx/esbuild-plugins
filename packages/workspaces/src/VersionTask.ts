@@ -29,6 +29,6 @@ export const VersionTask: Task<(semver: string) => void> = {
         JSON.stringify(meta, null, 2) + '\n'
       )
     }
-    report(`bumped version to ${semver}`)
+    report(`bumped version to ${semver}`, false)
   }
 }

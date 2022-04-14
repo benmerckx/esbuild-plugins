@@ -30,6 +30,7 @@ function createTypes() {
     async () => {
       execSync(tsc, {stdio: 'inherit', cwd: process.cwd()})
     },
+    'type checking',
     err => {
       if (err) return `type errors found`
       return `types built`
@@ -85,6 +86,7 @@ function task(
               plugins: [ExtensionPlugin],
               ...config.buildOptions
             }),
+          `building ${meta.name}`,
           err => {
             if (err) return `${meta.name} has errors`
             else return `${meta.name} built`

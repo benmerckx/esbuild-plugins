@@ -40,25 +40,29 @@ export function list<T>(...p: Array<T | undefined | Array<T>>): List<T> {
   })
 }
 
-export function report(message: string, success = false) {
+export function report(message: string, isStart: boolean, success = false) {
   const status = success ? 36 : 90
-  console.log(`\x1b[${status}m> ${message}\x1b[39m`)
+  const line = `\x1b[${status}m> ${message}\x1b[39m\r`
+  if (isStart) process.stdout.write(line)
+  else console.log(line)
 }
 
 export async function reportTime<T>(
   run: () => Promise<T>,
-  message: (err?: Error) => string
+  startMessage: string,
+  endMessage: (err?: Error) => string
 ) {
   const start = process.hrtime()
   function duration() {
     const timing = process.hrtime(start)
     return prettyMs((timing[0] * 1000000000 + timing[1]) / 1000000)
   }
+  report(startMessage, true)
   try {
     await run()
-    report(`${message()}\x1b[90m in ${duration()}`, true)
+    report(`${endMessage()}\x1b[90m in ${duration()}`, false, true)
   } catch (e) {
-    console.dir(e)
-    report(message(e as Error))
+    // console.dir(e)
+    report(endMessage(e as Error), false)
   }
 }
