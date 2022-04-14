@@ -13,6 +13,7 @@
   "dependencies": {
     "@esbx/extension": "0.0.0",
     "@esbx/external": "0.0.0",
+    "@esbx/reporter": "0.0.0",
     "@esbx/static": "0.0.0",
     "@esbx/util": "0.0.0",
     "fs-extra": "^10.0.0",

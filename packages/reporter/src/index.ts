@@ -1,1 +1,1 @@
-export * from './ReporterPlugin'
+export * from './ReporterPlugin.js'

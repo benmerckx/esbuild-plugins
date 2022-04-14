@@ -12,13 +12,9 @@ function plugin(options: ReporterPluginOptions = {}): Plugin {
     setup(build) {
       const title = options?.name || 'Build'
       let start: [number, number] | undefined
-      let isRebuilding = false
 
       build.onStart(() => {
-        if (start) {
-          isRebuilding = true
-          report(`${title} building...`, true)
-        }
+        report(`${title} building...`, true)
         start = process.hrtime()
       })
 
@@ -29,13 +25,7 @@ function plugin(options: ReporterPluginOptions = {}): Plugin {
           (timing[0] * 1000000000 + timing[1]) / 1000000
         )
         if (hasErrors) report(`${title} has errors`, false)
-        else {
-          if (isRebuilding) {
-            process.stdout.moveCursor(0, -1)
-            process.stdout.clearLine(1)
-          }
-          report(`${title} completed\x1b[90m in ${duration}`, false, true)
-        }
+        else report(`${title} completed\x1b[90m in ${duration}`, false, true)
       })
     }
   }

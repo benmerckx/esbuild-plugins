@@ -1,5 +1,6 @@
 import {ExtensionPlugin} from '@esbx/extension'
 import {list, reportTime} from '@esbx/util'
+import {ReporterPlugin} from '@esbx/reporter'
 import {execSync} from 'child_process'
 import {build, BuildOptions} from 'esbuild'
 import {Task} from 'esbx'
@@ -72,26 +73,19 @@ function task(
           )
           if (fs.existsSync(typeDir)) await fs.copy(typeDir, dist)
         }
-        return reportTime(
-          () =>
-            build({
-              format: 'esm',
-              outdir: 'dist',
-              bundle: true,
-              sourcemap: true,
-              absWorkingDir: cwd,
-              entryPoints: entryPoints.filter(
-                entry => !entry.endsWith('.d.ts')
-              ),
-              plugins: [ExtensionPlugin],
-              ...config.buildOptions
-            }),
-          `building ${meta.name}`,
-          err => {
-            if (err) return `${meta.name} has errors`
-            else return `${meta.name} built`
-          }
-        )
+        return build({
+          format: 'esm',
+          outdir: 'dist',
+          bundle: true,
+          sourcemap: true,
+          absWorkingDir: cwd,
+          entryPoints: entryPoints.filter(entry => !entry.endsWith('.d.ts')),
+          watch: options.watch,
+          plugins: (config.buildOptions?.plugins || [ExtensionPlugin]).concat(
+            ReporterPlugin.configure({name: meta.name})
+          ),
+          ...config.buildOptions
+        }) //
       }
       for (const workspace of workspaces) {
         const meta = getManifest(workspace)

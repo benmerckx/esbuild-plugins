@@ -58,7 +58,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@esbx/reporter@workspace:packages/reporter":
+"@esbx/reporter@0.0.0, @esbx/reporter@workspace:packages/reporter":
   version: 0.0.0-use.local
   resolution: "@esbx/reporter@workspace:packages/reporter"
   dependencies:
@@ -123,6 +123,7 @@ __metadata:
   dependencies:
     "@esbx/extension": 0.0.0
     "@esbx/external": 0.0.0
+    "@esbx/reporter": 0.0.0
     "@esbx/static": 0.0.0
     "@esbx/util": 0.0.0
     "@types/fs-extra": ^9.0.13
