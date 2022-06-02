@@ -109,6 +109,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@esbx/target@workspace:packages/target":
+  version: 0.0.0-use.local
+  resolution: "@esbx/target@workspace:packages/target"
+  languageName: unknown
+  linkType: soft
+
 "@esbx/util@0.0.0, @esbx/util@workspace:packages/util":
   version: 0.0.0-use.local
   resolution: "@esbx/util@workspace:packages/util"

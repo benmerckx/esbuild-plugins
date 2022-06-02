@@ -1,0 +1,13 @@
+{
+  "name": "@esbx/target",
+  "version": "0.0.0",
+  "license": "MIT",
+  "repository": "git://github.com/benmerckx/esbx.git",
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "exports": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "sideEffects": false
+}
